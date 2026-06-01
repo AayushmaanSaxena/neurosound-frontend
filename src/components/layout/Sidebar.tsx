@@ -1,9 +1,15 @@
-import { NavLink } from 'react-router-dom'
-
-// NavLink is like a regular link but automatically
-// adds an 'active' class when the URL matches
+import { NavLink, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 
 const Sidebar = () => {
+    const { user, logout } = useAuth()
+    const navigate = useNavigate()
+
+    const handleLogout = async () => {
+        await logout()
+        navigate('/login')
+    }
+
     return (
         <div className="w-64 bg-ns-black flex flex-col h-full">
 
@@ -18,6 +24,7 @@ const Sidebar = () => {
             <nav className="px-3 py-2">
                 <NavLink
                     to="/"
+                    end
                     className={({ isActive }) =>
                         `flex items-center gap-4 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                             isActive
@@ -67,11 +74,36 @@ const Sidebar = () => {
                 <p className="text-ns-gray text-xs font-semibold uppercase tracking-widest px-3 mb-2">
                     Playlists
                 </p>
-                {/* Playlists will be loaded here in Day 5 */}
                 <p className="text-ns-light-gray text-sm px-3">
                     No playlists yet
                 </p>
             </div>
+
+            {/* User section at bottom */}
+            {user && (
+                <div className="p-3 border-t border-ns-card">
+                    <div className="flex items-center gap-3 px-2 py-2 rounded-md hover:bg-ns-hover transition-colors">
+                        {/* Avatar */}
+                        <div className="w-8 h-8 bg-ns-green rounded-full flex items-center justify-center flex-shrink-0">
+                            <span className="text-black text-sm font-bold">
+                                {user.name.charAt(0).toUpperCase()}
+                            </span>
+                        </div>
+                        {/* Name */}
+                        <span className="text-ns-white text-sm font-medium flex-1 truncate">
+                            {user.name}
+                        </span>
+                        {/* Logout button */}
+                        <button
+                            onClick={handleLogout}
+                            className="text-ns-gray hover:text-ns-white text-xs transition-colors"
+                            title="Log out"
+                        >
+                            ⏏
+                        </button>
+                    </div>
+                </div>
+            )}
 
         </div>
     )

@@ -39,8 +39,13 @@ api.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
+
+        // Skip refresh logic for auth endpoints
+        // Login/register failures should just throw the error
+        const isAuthRoute = originalRequest.url?.includes('/auth/')
+
         // If 401 and we haven't already tried to refresh
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (error.response?.status === 401 && !originalRequest._retry && !isAuthRoute) {
             originalRequest._retry = true;
 
             try {
