@@ -73,6 +73,74 @@ api.interceptors.response.use(
 
         return Promise.reject(error);
     }
+
 );
+
+// ─────────────────────────────────────────
+// SONGS API
+// ─────────────────────────────────────────
+export const songsApi = {
+    getAll: (page = 1, limit = 20) =>
+        api.get(`/songs?page=${page}&limit=${limit}`),
+
+    getById: (id: number) =>
+        api.get(`/songs/${id}`),
+
+    create: (formData: FormData) =>
+        api.post('/songs', formData),
+
+    update: (id: number, data: Partial<{ title: string; artist_id: number; album_id: number; duration: number }>) =>
+        api.put(`/songs/${id}`, data),
+
+    delete: (id: number) =>
+        api.delete(`/songs/${id}`),
+}
+
+// ─────────────────────────────────────────
+// ARTISTS API
+// ─────────────────────────────────────────
+export const artistsApi = {
+    getAll: () => api.get('/artists'),
+    getById: (id: number) => api.get(`/artists/${id}`),
+}
+
+// ─────────────────────────────────────────
+// ALBUMS API
+// ─────────────────────────────────────────
+export const albumsApi = {
+    getAll: () => api.get('/albums'),
+    getById: (id: number) => api.get(`/albums/${id}`),
+}
+
+// ─────────────────────────────────────────
+// SEARCH API
+// ─────────────────────────────────────────
+export const searchApi = {
+    search: (q: string) => api.get(`/search?q=${q}`),
+    searchSongs: (q: string) => api.get(`/search/songs?q=${q}`),
+    searchArtists: (q: string) => api.get(`/search/artists?q=${q}`),
+}
+
+// ─────────────────────────────────────────
+// LIKED SONGS API
+// ─────────────────────────────────────────
+export const likedSongsApi = {
+    getAll: () => api.get('/liked-songs'),
+    toggle: (songId: number) => api.post(`/liked-songs/${songId}/toggle`),
+    check: (songId: number) => api.get(`/liked-songs/${songId}/check`),
+}
+
+// ─────────────────────────────────────────
+// PLAYLISTS API
+// ─────────────────────────────────────────
+export const playlistsApi = {
+    getAll: () => api.get('/playlists'),
+    getById: (id: number) => api.get(`/playlists/${id}`),
+    create: (formData: FormData) => api.post('/playlists', formData),
+    addSong: (playlistId: number, songId: number) =>
+        api.post(`/playlists/${playlistId}/songs`, { song_id: songId }),
+    removeSong: (playlistId: number, songId: number) =>
+        api.delete(`/playlists/${playlistId}/songs/${songId}`),
+}
 
 export default api;
