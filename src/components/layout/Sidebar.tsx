@@ -1,9 +1,11 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import usePlaylists from '../../hooks/usePlaylists'
 
 const Sidebar = () => {
     const { user, logout } = useAuth()
     const navigate = useNavigate()
+    const { playlists } = usePlaylists()
 
     const handleLogout = async () => {
         await logout()
@@ -69,14 +71,52 @@ const Sidebar = () => {
             {/* Divider */}
             <div className="mx-3 my-2 border-t border-ns-light-gray opacity-30" />
 
-            {/* Playlists section */}
+             {/* Playlists section */}
             <div className="px-3 py-2 flex-1 overflow-y-auto">
-                <p className="text-ns-gray text-xs font-semibold uppercase tracking-widest px-3 mb-2">
-                    Playlists
-                </p>
-                <p className="text-ns-light-gray text-sm px-3">
-                    No playlists yet
-                </p>
+                <div className="flex items-center justify-between px-3 mb-2">
+                    <p className="text-ns-gray text-xs font-semibold uppercase tracking-widest">
+                        Playlists
+                    </p>
+                </div>
+
+                {/* Liked Songs link */}
+                <NavLink
+                    to="/liked-songs"
+                    className={({ isActive }) =>
+                        `flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                            isActive
+                                ? 'text-ns-white bg-ns-hover'
+                                : 'text-ns-gray hover:text-ns-white'
+                        }`
+                    }
+                >
+                    <span>💜</span>
+                    Liked Songs
+                </NavLink>
+
+                {/* User playlists */}
+                {playlists.length === 0 ? (
+                    <p className="text-ns-light-gray text-xs px-3 mt-2">
+                        No playlists yet
+                    </p>
+                ) : (
+                    playlists.map(playlist => (
+                        <NavLink
+                            key={playlist.id}
+                            to={`/playlist/${playlist.id}`}
+                            className={({ isActive }) =>
+                                `flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors truncate ${
+                                    isActive
+                                        ? 'text-ns-white bg-ns-hover'
+                                        : 'text-ns-gray hover:text-ns-white'
+                                }`
+                            }
+                        >
+                            <span>🎵</span>
+                            <span className="truncate">{playlist.name}</span>
+                        </NavLink>
+                    ))
+                )}
             </div>
 
             {/* User section at bottom */}

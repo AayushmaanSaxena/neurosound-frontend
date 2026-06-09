@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ui/ProtectedRoute'
 import HomePage from './pages/HomePage'
 import SearchPage from './pages/SearchPage'
 import LibraryPage from './pages/LibraryPage'
+import LikedSongsPage from './pages/LikedSongsPage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -19,6 +20,7 @@ function App() {
                 <Route index element={<HomePage />} />
                 <Route path="search" element={<SearchPage />} />
                 <Route path="library" element={<LibraryPage />} />
+                <Route path="liked-songs" element={<LikedSongsPage />} />
             </Route>
 
             {/* Auth routes — full screen, no sidebar */}
